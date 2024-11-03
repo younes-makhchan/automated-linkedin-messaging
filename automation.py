@@ -41,7 +41,7 @@ def send_first_message(wait,message):
     textarea = wait.until(EC.presence_of_element_located((By.ID, "org-message-page-modal-message")))
     textarea.clear()
     textarea.send_keys(message)
-    time.sleep(1)
+    time.sleep(10)
     send_message_btn = wait.until(EC.presence_of_element_located((By.XPATH, '//button[.//span[text()="Send message"]]')))
     send_message_btn.click()
     time.sleep(2)
@@ -64,9 +64,17 @@ def send_files(wait,files):
 
         # Send the file path to the input
         file_input1.send_keys(file_path)
+        time.sleep(1)
 
     # Wait for the send message button to be present and click it
     send_message = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@type='submit' and text()='Send']")))
     send_message.click()
+
+    #close the conversation window
+    time.sleep(0.5)
+    class_name = "msg-overlay-bubble-header__control artdeco-button artdeco-button--circle artdeco-button--muted artdeco-button--1 artdeco-button--tertiary ember-view"
+    close_btn = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, f".{class_name.replace(' ', '.')}")))
+    
+    close_btn.click()
 
 
