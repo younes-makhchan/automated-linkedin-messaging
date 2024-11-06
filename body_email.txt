@@ -1,0 +1,15 @@
+Hello _name_ Team
+
+I hope this message finds you well. I'm a Motivated project oriented Software Engineer :D. I'm reaching out to express my interest in exploring part-time, remote development opportunities with _name_.
+
+Please find attached my resume and cover letter, where I highlight my experience at Oracle and CyberDefenders, as well as relevant projects and technical skills.
+
+For additional information, you can view my work at:
+
+    Portfolio: makhchan.tech
+    GitHub: github.com/younes-makhchan
+
+I look forward to any opportunity to discuss how my skills and experience can contribute to _name_.
+
+Warm regards
+Younes Makhchan

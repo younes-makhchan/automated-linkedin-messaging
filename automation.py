@@ -9,43 +9,60 @@ import time
 import os
 import pickle
 
-def save_cookies(driver, filename):
+COOKIE_FILE = "linkedin_cookies.pkl"
+
+def save_cookies(driver, filename=COOKIE_FILE):
     with open(filename, "wb") as file:
         pickle.dump(driver.get_cookies(), file)
 
-def load_cookies(driver, filename):
-    with open(filename, "rb") as file:
-        cookies = pickle.load(file)
-        for cookie in cookies:
-            driver.add_cookie(cookie)
-            
+def load_cookies(driver, filename=COOKIE_FILE):
+    if os.path.exists(filename):
+        with open(filename, "rb") as file:
+            cookies = pickle.load(file)
+            for cookie in cookies:
+                driver.add_cookie(cookie)
+
 def setup_driver_session(email, password):
-    # Set up Chrome options for headless mode
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless')  # Enable headless mode
-    options.add_argument('--disable-gpu')  # Disable GPU acceleration
-    options.add_argument('--no-sandbox')  # Bypass OS security model, required for running as root (Linux only)
-    options.add_argument('--disable-dev-shm-usage')  # Overcome limited resource problems
-    
     # Set up the service and driver with options
     service = Service(executable_path="./chromedriver/chromedriver.exe")
     driver = webdriver.Chrome(service=service)
-
+    
+    # Load saved cookies, if any
+    
     # Navigate to LinkedIn (homepage)
     driver.get("https://www.linkedin.com/login")
+    load_cookies(driver)
+    driver.refresh()
+    # Check if we're already logged in
+    try:
+        wait = WebDriverWait(driver, 10)
+        wait.until(EC.presence_of_element_located((By.ID, "global-nav")))
+        print("Logged in successfully using saved cookies.")
+        return driver, wait
+    except:
+        pass
+    
+    # If not logged in, login with email and password
     email_field = driver.find_element(By.NAME, "session_key")
     email_field.send_keys(email)
     password_field = driver.find_element(By.NAME, "session_password")
     password_field.send_keys(password)
     password_field.submit()
-    time.sleep(10)
-    # Create a WebDriverWait instance
+    
+    # Wait for the feed page to load
     wait = WebDriverWait(driver, 10)
+    wait.until(EC.presence_of_element_located((By.ID, "global-nav")))
+    
+    # Save the cookies for future use
+    save_cookies(driver)
+    
+    print("Logged in successfully.")
     return driver, wait
 
-
-
-def send_first_message(wait,message):
+def send_first_message(wait,name):
+    message = ""
+    with open("./body_email.txt", "r",encoding="utf-8") as file:
+        message = file.read().replace("_name_", name)
     try:
         button_with_message_span = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Message']]")))
     except TimeoutException  as e :
@@ -66,7 +83,9 @@ def send_first_message(wait,message):
 
     textarea = wait.until(EC.presence_of_element_located((By.ID, "org-message-page-modal-message")))
     textarea.clear()
+    
     textarea.send_keys(message)
+    time.sleep(60)
     send_message_btn = wait.until(EC.presence_of_element_located((By.XPATH, '//button[.//span[text()="Send message"]]')))
     send_message_btn.click()
     time.sleep(0.5)

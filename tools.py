@@ -1,6 +1,7 @@
 import json
 
-def update_company_value(file_path, company_name, key, new_value):
+def update_company_value( company_name, key, new_value):
+    file_path="./companies.json"
     with open(file_path, 'r') as file:
         data = json.load(file)
     
