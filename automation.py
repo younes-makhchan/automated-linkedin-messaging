@@ -8,6 +8,8 @@ from selenium.common.exceptions import TimeoutException
 import time
 import os
 import pickle
+from create_pdf import create_updated_pdf
+from tools import update_company_value
 
 COOKIE_FILE = "linkedin_cookies.pkl"
 
@@ -124,3 +126,23 @@ def send_files(wait,files):
     time.sleep(1)
 
 
+
+def send_message(driver,wait,company):
+    driver.get(company['url'])   
+    
+    #sending the first career message 
+    is_sent= send_first_message(wait,company['name'])
+    if not is_sent:
+        print("timeoutexception: page doesn't allow sending messages")
+        update_company_value( company['name'], 'status', "failed")
+        return False
+    
+    #updating the docs with company name and converting them to pdf 
+    pdf_path =create_updated_pdf(company["name"],"./Younes Makhchan Cover Letter.docx")
+
+    #sending the pdfs
+    send_files(wait,["./younes makhchan resume.pdf",pdf_path])
+    
+    update_company_value( company['name'], 'status', "applied")
+    return True
+    
