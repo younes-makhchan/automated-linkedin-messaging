@@ -35,17 +35,18 @@ Create a `companies.json` file in the root directory with the following format:
     }
     // more companies
 ]
-
+```
 ### 5. Install the Requirements
 
 Install the required dependencies by running:
 
 ```bash
 pip install -r requirements.txt
-
+```
 ### 5. run the script
 
 Run the automation
 
 ```python
 python main.py
+```
