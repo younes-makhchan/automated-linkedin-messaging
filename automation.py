@@ -63,7 +63,7 @@ def setup_driver_session(email, password):
 
 def send_first_message(wait,name):
     message = ""
-    with open("./body_email.txt", "r",encoding="utf-8") as file:
+    with open("./message_body.txt", "r",encoding="utf-8") as file:
         message = file.read().replace("_name_", name)
     try:
         button_with_message_span = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Message']]")))
