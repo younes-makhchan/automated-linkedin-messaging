@@ -38,7 +38,7 @@ Create a `companies.json` file in the root directory with the following format:
 ```
 ### 5. Install the Requirements
 
-Install the required dependencies by running:
+Install the required dependencies by running, better to setup a venv:
 
 ```bash
 pip install -r requirements.txt
