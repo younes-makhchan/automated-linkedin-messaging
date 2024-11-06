@@ -87,16 +87,18 @@ def send_first_message(wait,name):
     textarea.clear()
     
     textarea.send_keys(message)
-    time.sleep(60)
     send_message_btn = wait.until(EC.presence_of_element_located((By.XPATH, '//button[.//span[text()="Send message"]]')))
     send_message_btn.click()
     time.sleep(0.5)
     return True
 
 
-def send_files(wait,files):
-    #assuming we are at the page where we want to send the files and we already sent the first message
-
+def send_files(wait,company,resume_letter_pdf_path,cover_letter_docs_path):
+    
+    #updating the docs with company name and converting them to pdf 
+    pdf_path =create_updated_pdf(company["name"],cover_letter_docs_path)
+    
+    files = [resume_letter_pdf_path,pdf_path]
     # Wait for the button with the message span to be present and click it
     button_with_message_span = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Message']]")))
     print(button_with_message_span.text)
@@ -127,7 +129,7 @@ def send_files(wait,files):
 
 
 
-def send_message(driver,wait,company):
+def send_message(driver,wait,company,cover_letter_docs_path,resume_letter_pdf_path):
     driver.get(company['url'])   
     
     #sending the first career message 
@@ -137,11 +139,9 @@ def send_message(driver,wait,company):
         update_company_value( company['name'], 'status', "failed")
         return False
     
-    #updating the docs with company name and converting them to pdf 
-    pdf_path =create_updated_pdf(company["name"],"./Younes Makhchan Cover Letter.docx")
 
     #sending the pdfs
-    send_files(wait,["./younes makhchan resume.pdf",pdf_path])
+    send_files(wait,company,resume_letter_pdf_path,cover_letter_docs_path)
     
     update_company_value( company['name'], 'status', "applied")
     return True
