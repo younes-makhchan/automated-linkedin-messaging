@@ -1,5 +1,5 @@
 import json
-
+import os
 def update_company_value( company_name, key, new_value):
     file_path="./companies.json"
     with open(file_path, 'r') as file:
@@ -16,6 +16,8 @@ def update_company_value( company_name, key, new_value):
 
 
 def validate_companies_file(file_path="./companies.json"):
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"The file '{file_path}' does not exist.")
     with open(file_path, 'r') as file:
         data = json.load(file)
     

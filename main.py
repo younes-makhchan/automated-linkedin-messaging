@@ -3,7 +3,6 @@ from tools import update_company_value,validate_companies_file
 import time
 from dotenv import load_dotenv
 import os
-import json
 import random
 
 load_dotenv()
