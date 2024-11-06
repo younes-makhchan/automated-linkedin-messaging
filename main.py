@@ -31,6 +31,7 @@ for index,company in enumerate(companies):
         continue
 
     send_message(driver,wait,company,cover_letter_docs_path,resume_letter_pdf_path)
+    print("current index is ",index,""*10)
     if (index + 1) % 15 == 0:
         sleep_duration = random.randint(25, 30)
         print(f"Sleeping for {sleep_duration} seconds (after {index + 1} companies)...")

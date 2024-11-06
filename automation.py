@@ -95,14 +95,14 @@ def send_first_message(wait,name):
 
 def send_files(wait,company,resume_letter_pdf_path,cover_letter_docs_path):
     
-    files = [resume_letter_pdf_path,pdf_path]
     
     if not os.path.exists(resume_letter_pdf_path) or not os.path.exists(cover_letter_docs_path):
         raise FileNotFoundError(f"The file '{resume_letter_pdf_path}' or '{cover_letter_docs_path}'  does not exist.")
  
     #updating the docs with company name and converting them to pdf 
     pdf_path =create_updated_pdf(company["name"],cover_letter_docs_path)
-    
+    files = [resume_letter_pdf_path,pdf_path]
+
     
     # Wait for the button with the message span to be present and click it
     button_with_message_span = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[text()='Message']]")))
